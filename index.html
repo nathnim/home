@@ -86,6 +86,8 @@ a.card:hover{transform:translateY(-2px);border-color:var(--sign)}
 
 footer{border-top:1px solid var(--line);padding-block:20px 28px;color:var(--muted);font-size:13px}
 footer .wrap{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.disclaimer{max-width:78ch;margin:12px 0 0;padding-top:14px;border-top:1px dashed var(--line);font-size:12.5px;line-height:1.6}
+.disclaimer b{color:var(--ink);font-weight:600}
 footer i{font-style:normal;opacity:.5;margin:0 6px}
 @media (prefers-reduced-motion:reduce){a.card{transition:none}a.card:hover{transform:none}}
 </style>
@@ -122,6 +124,7 @@ footer i{font-style:normal;opacity:.5;margin:0 6px}
     <span>© 2026 Bản quyền: <b>TS. Đặng Minh Tân</b></span>
     <span>Bộ môn Đường bộ – Sân bay <i>|</i> Khoa Công trình và Môi trường <i>|</i> Trường Đại học Giao thông Vận tải</span>
     <span>Liên hệ: tandang@utc.edu.vn</span>
+    <p class="disclaimer">Nội dung được xây dựng phục vụ giảng dạy, học tập và nghiên cứu khoa học. Một số nội dung mang tính chất minh họa cho sinh viên; số liệu trong các ứng dụng có thể là giả định hoặc mô phỏng. Kết quả tính toán chỉ có giá trị tham khảo, không thay thế hồ sơ thiết kế, tiêu chuẩn kỹ thuật hiện hành và phần mềm chuyên dụng.</p>
   </div>
 </footer>
 
@@ -146,7 +149,7 @@ const APPS = [
    url:"https://nathnim.github.io/gaptime"},
   {id:"tmc", group:"tc", ref:"LOS · xcqđ/giờ · Ưu tiên xe buýt",
    name:"Trung tâm Điều hành Giao thông",
-   desc:"Bảng điều hành giao thông Hà Nội: giám sát nút giao, camera, sự cố, hàng chờ và thời gian đèn tín hiệu.",
+   desc:"Minh họa bảng điều hành giao thông: giám sát nút giao, camera, sự cố, hàng chờ và thời gian đèn tín hiệu.",
    url:"https://nathnim.github.io/TMC/"},
   {id:"digitaltwins", group:"tc", ref:"Bản sao số · Digital Twin",
    name:"Bản sao số đô thị mẫu",
