@@ -127,6 +127,7 @@ footer i{font-style:normal;opacity:.5;margin:0 6px}
     <span>© 2026 Bản quyền: <b>TS. Đặng Minh Tân</b></span>
     <span>Bộ môn Đường bộ – Sân bay <i>|</i> Khoa Công trình và Môi trường <i>|</i> Trường Đại học Giao thông Vận tải</span>
     <span>Liên hệ: tandang@utc.edu.vn</span>
+    <span id="visitsLine" hidden>Lượt truy cập: <b id="visits"></b></span>
     <p class="disclaimer">Nội dung được xây dựng phục vụ giảng dạy, học tập và nghiên cứu khoa học. Một số nội dung mang tính chất minh họa cho sinh viên; số liệu trong các ứng dụng có thể là giả định hoặc mô phỏng. Kết quả tính toán chỉ có giá trị tham khảo, không thay thế hồ sơ thiết kế, tiêu chuẩn kỹ thuật hiện hành và phần mềm chuyên dụng.</p>
   </div>
 </footer>
@@ -241,5 +242,12 @@ document.getElementById("q").addEventListener("input",e=>{query=e.target.value;r
 render();
 </script>
 
+<script data-goatcounter="https://nathnim.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<script>
+fetch("https://nathnim.goatcounter.com/counter/TOTAL.json")
+  .then(r=>{if(!r.ok) throw 0; return r.json()})
+  .then(d=>{document.getElementById("visits").textContent=d.count;document.getElementById("visitsLine").hidden=false})
+  .catch(()=>{});
+</script>
 </body>
 </html>
