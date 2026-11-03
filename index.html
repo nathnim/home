@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cổng ứng dụng Giao thông</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: biển chỉ dẫn đường bộ — đầu trang như tấm biển xanh, hai "làn" ứng dụng ngăn bởi vạch sơn đứt */
+:root{
+  --bg:#f3f5f7; --surface:#ffffff; --ink:#16212c; --muted:#5a6878; --line:#d5dce4;
+  --sign:#0b4f9c; --sign-ink:#ffffff; --paint:#f2b705; --asphalt:#2b333c;
+  --road:#3d6b3a; --traffic:#b4441c;
+  --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12171d; --surface:#1a222b; --ink:#e7ecf1; --muted:#97a5b4; --line:#2c3743;
+  --sign:#1a5fb0; --sign-ink:#ffffff; --paint:#f5c636; --asphalt:#0c1014;
+  --road:#7fb47a; --traffic:#e9895f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12171d; --surface:#1a222b; --ink:#e7ecf1; --muted:#97a5b4; --line:#2c3743;
+  --sign:#1a5fb0; --sign-ink:#ffffff; --paint:#f5c636; --asphalt:#0c1014;
+  --road:#7fb47a; --traffic:#e9895f; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* Biển đầu trang */
+header{background:var(--sign);color:var(--sign-ink);position:relative}
+header .wrap{padding-block:36px 30px;display:grid;gap:14px}
+.plate{border:3px solid var(--sign-ink);border-radius:10px;padding:22px 24px;display:grid;gap:10px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(34px,6vw,58px);line-height:1;margin:0;letter-spacing:.01em;text-wrap:balance}
+.byline{font-size:15px;opacity:.92;max-width:62ch}
+.byline b{font-weight:600}
+.road-strip{height:14px;background:var(--asphalt);position:relative;overflow:hidden}
+.road-strip::after{content:"";position:absolute;left:0;right:0;top:6px;height:2px;
+  background:repeating-linear-gradient(90deg,var(--paint) 0 28px,transparent 28px 52px)}
+
+/* Thanh công cụ */
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-block:22px 6px}
+.lane[data-group="tk"] .lane-tag{background:var(--sign);color:var(--sign-ink)}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:4px}
+.tabs button{font:600 14px var(--f-body);border:0;background:transparent;color:var(--muted);padding:7px 12px;border-radius:5px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--sign);color:var(--sign-ink)}
+.search{flex:1 1 220px;min-width:0}
+.search input{width:100%;font:15px var(--f-body);padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.btn-ghost{font:500 14px var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:9px 12px;border-radius:8px;cursor:pointer}
+.btn-ghost[aria-pressed="true"]{border-color:var(--paint);box-shadow:inset 0 0 0 1px var(--paint)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--paint);outline-offset:2px}
+
+/* Làn ứng dụng */
+main{padding-block:10px 40px;display:grid;gap:34px}
+.lane{display:grid;gap:16px}
+.lane-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.lane-head h2{font-family:var(--f-display);font-weight:600;font-size:30px;margin:0;line-height:1.1}
+.lane-head p{margin:0;color:var(--muted);font-size:14px}
+.lane-tag{font-family:var(--f-mono);font-size:12px;color:var(--sign-ink);background:var(--asphalt);padding:3px 8px;border-radius:4px}
+.lane[data-group="nen"] .lane-tag{background:var(--road);color:#fff}
+.lane[data-group="tc"] .lane-tag{background:var(--traffic);color:#fff}
+.divider{height:2px;background:repeating-linear-gradient(90deg,var(--line) 0 22px,transparent 22px 38px)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:grid;grid-template-rows:auto auto 1fr auto;gap:8px;min-width:0;
+  text-decoration:none;color:inherit;transition:transform .15s,border-color .15s}
+a.card:hover{transform:translateY(-2px);border-color:var(--sign)}
+.card .ref{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.card h3{font-family:var(--f-display);font-weight:600;font-size:22px;line-height:1.15;margin:0}
+.card p{margin:0;font-size:14px;color:var(--muted)}
+.card .foot{display:flex;justify-content:space-between;align-items:center;gap:8px;padding-top:8px;border-top:1px dashed var(--line);font-size:13px}
+.card .file{font-family:var(--f-mono);font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.card .go{font-weight:600;color:var(--sign);white-space:nowrap}
+:root[data-theme="dark"] .card .go{color:var(--paint)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .card .go{color:var(--paint)}}
+.card.missing{border-style:dashed}
+.card.missing .go{color:var(--muted)}
+.card input{width:100%;font:12px var(--f-mono);padding:7px 8px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.card label{font-size:12px;color:var(--muted)}
+.editbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--paint);border-radius:8px;padding:10px 14px;font-size:14px}
+.empty{color:var(--muted);font-size:14px}
+
+footer{border-top:1px solid var(--line);padding-block:20px 28px;color:var(--muted);font-size:13px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:6px 20px;justify-content:space-between}
+@media (prefers-reduced-motion:reduce){a.card{transition:none}a.card:hover{transform:none}}
+</style>
+
+</head>
+<body style="margin:0">
+<header>
+  <div class="wrap">
+    <div class="plate">
+      <h1>Cổng ứng dụng Kỹ thuật Giao thông</h1>
+      <div class="byline">Các công cụ về <b>khối nền – mặt đường</b>, <b>tổ chức giao thông</b> và tra cứu nghiên cứu do <b>TS. Đặng Minh Tân</b>, Trường Đại học Giao thông Vận tải, phát triển phục vụ giảng dạy và nghiên cứu.</div>
+    </div>
+  </div>
+  <div class="road-strip" aria-hidden="true"></div>
+</header>
+
+<div class="wrap">
+  <div class="toolbar">
+    <div class="tabs" role="group" aria-label="Lọc theo nhóm">
+      <button type="button" data-filter="all" aria-pressed="true">Tất cả</button>
+      <button type="button" data-filter="nen" aria-pressed="false">Nền – mặt đường</button>
+      <button type="button" data-filter="tc" aria-pressed="false">Tổ chức giao thông</button>
+      <button type="button" data-filter="tk" aria-pressed="false">Tra cứu</button>
+    </div>
+    <div class="search"><input id="q" type="search" placeholder="Tìm ứng dụng, tiêu chuẩn… (vd: TCCS 38, RiLSA)" aria-label="Tìm ứng dụng"></div>
+    <button type="button" class="btn-ghost" id="editToggle" aria-pressed="false">Sửa liên kết</button>
+  </div>
+  <div class="editbar" id="editbar" hidden>
+    <span>Nhập đường dẫn cho từng ứng dụng (tên file .html cùng thư mục, hoặc địa chỉ https://). Liên kết được lưu trên trình duyệt này.</span>
+    <button type="button" class="btn-ghost" id="resetLinks">Khôi phục mặc định</button>
+  </div>
+</div>
+
+<main class="wrap" id="main"></main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 TS. Đặng Minh Tân · Trường Đại học Giao thông Vận tải</span>
+    <span>Liên hệ: tandang@utc.edu.vn</span>
+  </div>
+</footer>
+
+<script>
+// ===== Danh mục ứng dụng — sửa "url" tại đây để đổi liên kết mặc định =====
+const APPS = [
+  {id:"kcad38", group:"nen", ref:"TCCS 38:2022",
+   name:"Áo đường mềm TCCS 38",
+   desc:"Tính toán kết cấu áo đường mềm từ số liệu giao thông, nền đất và vật liệu; kiểm tra chiều dày các lớp.",
+   url:"https://nathnim.github.io/KCAD38/"},
+  {id:"mevi", group:"nen", ref:"Cơ học – thực nghiệm",
+   name:"MEVi",
+   desc:"Phân tích kết cấu áo đường mềm theo phương pháp cơ học – thực nghiệm, điều chỉnh cho điều kiện Việt Nam.",
+   url:"https://nathnim.github.io/MEVI/"},
+  {id:"slope", group:"nen", ref:"Fellenius · Bishop · Janbu · Spencer · M-P",
+   name:"Ổn định mái dốc",
+   desc:"Hệ số ổn định mặt trượt trụ tròn theo phương pháp phân mảnh, tối đa 5 lớp đất và đất đắp riêng.",
+   url:"https://nathnim.github.io/slopestability/"},
+  {id:"gaptime", group:"tc", ref:"h = tg + L/v · k = 1000/sh",
+   name:"Headway & Gap",
+   desc:"Khoảng cách an toàn dòng xe: ảnh hưởng của tốc độ, khoảng thời gian an toàn và chiều dài xe tới mật độ, lưu lượng.",
+   url:"https://nathnim.github.io/gaptime"},
+  {id:"tmc", group:"tc", ref:"LOS · xcqđ/giờ · Ưu tiên xe buýt",
+   name:"Trung tâm Điều hành Giao thông",
+   desc:"Bảng điều hành giao thông Hà Nội: giám sát nút giao, camera, sự cố, hàng chờ và thời gian đèn tín hiệu.",
+   url:"https://nathnim.github.io/TMC/"},
+  {id:"digitaltwins", group:"tc", ref:"Bản sao số · Digital Twin",
+   name:"Bản sao số đô thị mẫu",
+   desc:"Bảng điều hành đô thị thông minh với dữ liệu mô phỏng: dòng giao thông, cấm đường, nhu cầu đi lại.",
+   url:"https://nathnim.github.io/digitaltwins"},
+  {id:"standard", group:"tk", ref:"QCVN · TCVN · TCCS",
+   name:"Chỉ mục tiêu chuẩn XD – GT",
+   desc:"Tra cứu quy chuẩn, tiêu chuẩn xây dựng và giao thông hiện hành theo cấp pháp lý, loại công trình, giai đoạn và chủ đề.",
+   url:"https://nathnim.github.io/standard/"},
+  {id:"journal", group:"tk", ref:"Tạp chí khoa học · Gửi bài",
+   name:"Chỉ mục tạp chí XD – GT",
+   desc:"Danh mục tạp chí khoa học Việt Nam về xây dựng, cầu đường, giao thông, thủy lợi, kèm đường dẫn gửi bài.",
+   url:"https://nathnim.github.io/journal/"}
+];
+const GROUPS = {
+  nen:{title:"Khối nền – mặt đường", tag:"NỀN · MẶT ĐƯỜNG", note:"Thiết kế kết cấu áo đường và ổn định nền"},
+  tc:{title:"Tổ chức giao thông", tag:"TỔ CHỨC GT", note:"Dòng xe và quản lý vận hành đô thị"},
+  tk:{title:"Tra cứu – Nghiên cứu", tag:"TRA CỨU", note:"Tiêu chuẩn kỹ thuật và công bố khoa học"}
+};
+
+const KEY="cong-ung-dung-links-v2";
+let overrides={};
+try{overrides=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){overrides={}}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(overrides))}catch(e){}};
+const urlOf=a=>(overrides[a.id]!==undefined?overrides[a.id]:a.url).trim();
+
+let filter="all", query="", editing=false;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/đ/g,"d");
+
+function card(a){
+  const u=urlOf(a);
+  const inner=`<span class="ref">${esc(a.ref)}</span><h3>${esc(a.name)}</h3><p>${esc(a.desc)}</p>`;
+  if(editing){
+    return `<div class="card">${inner}<div class="foot" style="display:grid;gap:4px">
+      <label for="u-${a.id}">Đường dẫn</label>
+      <input id="u-${a.id}" data-id="${a.id}" value="${esc(u)}" placeholder="vd: ${esc(a.url||'https://…')}"></div></div>`;
+  }
+  if(!u) return `<div class="card missing">${inner}<div class="foot"><span class="file">Chưa gắn liên kết</span><span class="go">Sắp có</span></div></div>`;
+  return `<a class="card" href="${esc(u)}" target="_blank" rel="noopener">${inner}
+    <div class="foot"><span class="file">${esc(u)}</span><span class="go">Mở ứng dụng →</span></div></a>`;
+}
+
+function render(){
+  const q=norm(query);
+  let html="", first=true, total=0;
+  for(const g of Object.keys(GROUPS)){
+    if(filter!=="all"&&filter!==g) continue;
+    const list=APPS.filter(a=>a.group===g&&(!q||norm(a.name+" "+a.ref+" "+a.desc).includes(q)));
+    if(!list.length) continue;
+    total+=list.length;
+    if(!first) html+=`<div class="divider" aria-hidden="true"></div>`;
+    first=false;
+    html+=`<section class="lane" data-group="${g}"><div class="lane-head"><span class="lane-tag">${GROUPS[g].tag}</span>
+      <h2>${GROUPS[g].title}</h2><p>${GROUPS[g].note} · ${list.length} ứng dụng</p></div>
+      <div class="grid">${list.map(card).join("")}</div></section>`;
+  }
+  document.getElementById("main").innerHTML=total?html:`<p class="empty">Không tìm thấy ứng dụng phù hợp với “${esc(query)}”.</p>`;
+}
+
+document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>{
+  filter=b.dataset.filter;
+  document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  render();
+}));
+document.getElementById("q").addEventListener("input",e=>{query=e.target.value;render()});
+document.getElementById("editToggle").addEventListener("click",e=>{
+  editing=!editing;
+  e.currentTarget.setAttribute("aria-pressed",editing);
+  e.currentTarget.textContent=editing?"Xong":"Sửa liên kết";
+  document.getElementById("editbar").hidden=!editing;
+  render();
+});
+document.getElementById("main").addEventListener("input",e=>{
+  const id=e.target.dataset&&e.target.dataset.id; if(!id) return;
+  overrides[id]=e.target.value; save();
+});
+document.getElementById("resetLinks").addEventListener("click",()=>{overrides={};save();render()});
+render();
+</script>
+
+</body>
+</html>
