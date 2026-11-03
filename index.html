@@ -132,6 +132,14 @@ footer i{font-style:normal;opacity:.5;margin:0 6px}
 <script>
 // ===== Danh mục ứng dụng — sửa "url" tại đây để đổi liên kết mặc định =====
 const APPS = [
+  {id:"slope", group:"nen", ref:"Fellenius · Bishop · Janbu · Spencer · M-P",
+   name:"Ổn định mái dốc",
+   desc:"Hệ số ổn định mặt trượt trụ tròn theo phương pháp phân mảnh, tối đa 5 lớp đất và đất đắp riêng.",
+   url:"https://nathnim.github.io/slopestability/"},
+  {id:"wall", group:"nen", ref:"Tường trọng lực · Công xôn · MSE",
+   name:"Thiết kế tường chắn đất",
+   desc:"Chọn loại tường, kiểm toán ổn định cơ bản và xem hình vẽ minh họa; điều chỉnh nhanh thông số bằng thanh trượt.",
+   url:"https://nathnim.github.io/wall/"},
   {id:"kcad38", group:"nen", ref:"TCCS 38:2022",
    name:"Áo đường mềm TCCS 38",
    desc:"Tính toán kết cấu áo đường mềm từ số liệu giao thông, nền đất và vật liệu; kiểm tra chiều dày các lớp.",
@@ -140,10 +148,6 @@ const APPS = [
    name:"MEVi",
    desc:"Phân tích kết cấu áo đường mềm theo phương pháp cơ học – thực nghiệm, điều chỉnh cho điều kiện Việt Nam.",
    url:"https://nathnim.github.io/MEVI/"},
-  {id:"slope", group:"nen", ref:"Fellenius · Bishop · Janbu · Spencer · M-P",
-   name:"Ổn định mái dốc",
-   desc:"Hệ số ổn định mặt trượt trụ tròn theo phương pháp phân mảnh, tối đa 5 lớp đất và đất đắp riêng.",
-   url:"https://nathnim.github.io/slopestability/"},
   {id:"gaptime", group:"tc", ref:"h = tg + L/v · k = 1000/sh",
    name:"Headway & Gap",
    desc:"Khoảng cách an toàn dòng xe: ảnh hưởng của tốc độ, khoảng thời gian an toàn và chiều dài xe tới mật độ, lưu lượng.",
@@ -174,7 +178,7 @@ const APPS = [
    url:"https://www.zwsoft.com/vn", go:"Truy cập trang →"}
 ];
 const GROUPS = {
-  nen:{title:"Khối nền – mặt đường", tag:"NỀN · MẶT ĐƯỜNG", note:"Thiết kế kết cấu áo đường và ổn định nền"},
+  nen:{title:"Khối nền – mặt đường", tag:"NỀN · MẶT ĐƯỜNG", note:"Ổn định nền, tường chắn và kết cấu áo đường"},
   tc:{title:"Tổ chức giao thông", tag:"TỔ CHỨC GT", note:"Dòng xe và quản lý vận hành đô thị"},
   tk:{title:"Tra cứu – Nghiên cứu", tag:"TRA CỨU", note:"Tiêu chuẩn kỹ thuật và công bố khoa học"},
   lk:{title:"Liên kết ứng dụng", tag:"LIÊN KẾT", note:"Phần mềm thiết kế, CAD và BIM của các đơn vị đối tác"}
