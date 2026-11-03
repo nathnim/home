@@ -65,7 +65,9 @@ main{padding-block:10px 40px;display:grid;gap:34px}
 .lane[data-group="tc"] .lane-tag{background:var(--traffic);color:#fff}
 .divider{height:2px;background:repeating-linear-gradient(90deg,var(--line) 0 22px,transparent 22px 38px)}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.grid{display:grid;grid-template-columns:repeat(var(--cols,3),minmax(0,1fr));gap:14px}
+@media (max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.grid{grid-template-columns:minmax(0,1fr)}}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:grid;grid-template-rows:auto auto 1fr auto;gap:8px;min-width:0;
   text-decoration:none;color:inherit;transition:transform .15s,border-color .15s}
 a.card:hover{transform:translateY(-2px);border-color:var(--sign)}
@@ -197,6 +199,9 @@ let filter="all", query="", editing=false;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/đ/g,"d");
 
+// 3 cột mặc định (5 → 3+2, 6 → 3+3); khi chia 3 dư 1 thì dùng 4 cột (4 → 4, 7 → 4+3)
+const colsFor=n=>(n>=4&&n%3===1)?4:3;
+
 function card(a){
   const u=urlOf(a);
   const inner=`<span class="ref">${esc(a.ref)}</span><h3>${esc(a.name)}</h3><p>${esc(a.desc)}</p>`;
@@ -222,7 +227,7 @@ function render(){
     first=false;
     html+=`<section class="lane" data-group="${g}"><div class="lane-head"><span class="lane-tag">${GROUPS[g].tag}</span>
       <h2>${GROUPS[g].title}</h2><p>${GROUPS[g].note} · ${list.length} ứng dụng</p></div>
-      <div class="grid">${list.map(card).join("")}</div></section>`;
+      <div class="grid" style="--cols:${colsFor(list.length)}">${list.map(card).join("")}</div></section>`;
   }
   document.getElementById("main").innerHTML=total?html:`<p class="empty">Không tìm thấy ứng dụng phù hợp với “${esc(query)}”.</p>`;
 }
