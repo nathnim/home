@@ -112,6 +112,7 @@ footer i{font-style:normal;opacity:.5;margin:0 6px}
       <button type="button" data-filter="nen" aria-pressed="false">Nền – mặt đường</button>
       <button type="button" data-filter="tc" aria-pressed="false">Tổ chức giao thông</button>
       <button type="button" data-filter="tk" aria-pressed="false">Tra cứu</button>
+      <button type="button" data-filter="lk" aria-pressed="false">Liên kết</button>
     </div>
     <div class="search"><input id="q" type="search" placeholder="Tìm ứng dụng, tiêu chuẩn… (vd: TCCS 38, RiLSA)" aria-label="Tìm ứng dụng"></div>
   </div>
@@ -162,12 +163,21 @@ const APPS = [
   {id:"journal", group:"tk", ref:"Tạp chí khoa học · Gửi bài",
    name:"Chỉ mục tạp chí XD – GT",
    desc:"Danh mục tạp chí khoa học Việt Nam về xây dựng, cầu đường, giao thông, thủy lợi, kèm đường dẫn gửi bài.",
-   url:"https://nathnim.github.io/journal/"}
+   url:"https://nathnim.github.io/journal/"},
+  {id:"adscivil", group:"lk", ref:"Baezeni · BIM hạ tầng giao thông",
+   name:"ADSCivil",
+   desc:"Giải pháp BIM thiết kế hạ tầng giao thông của Baezeni, kèm môi trường dữ liệu chung ADSCivil CDE.",
+   url:"https://adscivil.vn/", go:"Truy cập trang →"},
+  {id:"zwcad", group:"lk", ref:"ZWSOFT · CAD tương thích DWG",
+   name:"ZWCAD",
+   desc:"Phần mềm CAD 2D/3D tương thích định dạng DWG, dùng cho bản vẽ kỹ thuật công trình.",
+   url:"https://www.zwsoft.com/vn", go:"Truy cập trang →"}
 ];
 const GROUPS = {
   nen:{title:"Khối nền – mặt đường", tag:"NỀN · MẶT ĐƯỜNG", note:"Thiết kế kết cấu áo đường và ổn định nền"},
   tc:{title:"Tổ chức giao thông", tag:"TỔ CHỨC GT", note:"Dòng xe và quản lý vận hành đô thị"},
-  tk:{title:"Tra cứu – Nghiên cứu", tag:"TRA CỨU", note:"Tiêu chuẩn kỹ thuật và công bố khoa học"}
+  tk:{title:"Tra cứu – Nghiên cứu", tag:"TRA CỨU", note:"Tiêu chuẩn kỹ thuật và công bố khoa học"},
+  lk:{title:"Liên kết ứng dụng", tag:"LIÊN KẾT", note:"Phần mềm thiết kế, CAD và BIM của các đơn vị đối tác"}
 };
 
 const KEY="cong-ung-dung-links-v2";
@@ -189,7 +199,7 @@ function card(a){
   }
   if(!u) return `<div class="card missing">${inner}<div class="foot"><span class="go">Sắp có</span></div></div>`;
   return `<a class="card" href="${esc(u)}" target="_blank" rel="noopener">${inner}
-    <div class="foot"><span class="go">Mở ứng dụng →</span></div></a>`;
+    <div class="foot"><span class="go">${a.go||"Mở ứng dụng →"}</span></div></a>`;
 }
 
 function render(){
