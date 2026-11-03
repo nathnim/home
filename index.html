@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cổng ứng dụng Giao thông</title>
+<title>Công cụ Công trình Giao thông</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -72,7 +72,7 @@ a.card:hover{transform:translateY(-2px);border-color:var(--sign)}
 .card .ref{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
 .card h3{font-family:var(--f-display);font-weight:600;font-size:22px;line-height:1.15;margin:0}
 .card p{margin:0;font-size:14px;color:var(--muted)}
-.card .foot{display:flex;justify-content:space-between;align-items:center;gap:8px;padding-top:8px;border-top:1px dashed var(--line);font-size:13px}
+.card .foot{display:flex;justify-content:flex-end;align-items:center;gap:8px;padding-top:8px;border-top:1px dashed var(--line);font-size:13px}
 .card .file{font-family:var(--f-mono);font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .card .go{font-weight:600;color:var(--sign);white-space:nowrap}
 :root[data-theme="dark"] .card .go{color:var(--paint)}
@@ -85,7 +85,8 @@ a.card:hover{transform:translateY(-2px);border-color:var(--sign)}
 .empty{color:var(--muted);font-size:14px}
 
 footer{border-top:1px solid var(--line);padding-block:20px 28px;color:var(--muted);font-size:13px}
-footer .wrap{display:flex;flex-wrap:wrap;gap:6px 20px;justify-content:space-between}
+footer .wrap{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+footer i{font-style:normal;opacity:.5;margin:0 6px}
 @media (prefers-reduced-motion:reduce){a.card{transition:none}a.card:hover{transform:none}}
 </style>
 
@@ -94,8 +95,9 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:6px 20px;justify-content:space-betw
 <header>
   <div class="wrap">
     <div class="plate">
-      <h1>Cổng ứng dụng Kỹ thuật Giao thông</h1>
-      <div class="byline">Các công cụ về <b>khối nền – mặt đường</b>, <b>tổ chức giao thông</b> và tra cứu nghiên cứu do <b>TS. Đặng Minh Tân</b>, Trường Đại học Giao thông Vận tải, phát triển phục vụ giảng dạy và nghiên cứu.</div>
+      <span class="eyebrow">Nghiên cứu · Quản lý · Khai thác</span>
+      <h1>Công cụ số cho Công trình Giao thông</h1>
+      <div class="byline">Bộ ứng dụng hỗ trợ nghiên cứu, quản lý và khai thác công trình giao thông, từ tính toán <b>khối nền – mặt đường</b>, <b>tổ chức và điều hành giao thông</b> đến tra cứu tiêu chuẩn và công bố khoa học.</div>
     </div>
   </div>
   <div class="road-strip" aria-hidden="true"></div>
@@ -110,11 +112,6 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:6px 20px;justify-content:space-betw
       <button type="button" data-filter="tk" aria-pressed="false">Tra cứu</button>
     </div>
     <div class="search"><input id="q" type="search" placeholder="Tìm ứng dụng, tiêu chuẩn… (vd: TCCS 38, RiLSA)" aria-label="Tìm ứng dụng"></div>
-    <button type="button" class="btn-ghost" id="editToggle" aria-pressed="false">Sửa liên kết</button>
-  </div>
-  <div class="editbar" id="editbar" hidden>
-    <span>Nhập đường dẫn cho từng ứng dụng (tên file .html cùng thư mục, hoặc địa chỉ https://). Liên kết được lưu trên trình duyệt này.</span>
-    <button type="button" class="btn-ghost" id="resetLinks">Khôi phục mặc định</button>
   </div>
 </div>
 
@@ -122,7 +119,8 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:6px 20px;justify-content:space-betw
 
 <footer>
   <div class="wrap">
-    <span>© 2026 TS. Đặng Minh Tân · Trường Đại học Giao thông Vận tải</span>
+    <span>© 2026 Bản quyền: <b>TS. Đặng Minh Tân</b></span>
+    <span>Bộ môn Đường bộ – Sân bay <i>|</i> Khoa Công trình và Môi trường <i>|</i> Trường Đại học Giao thông Vận tải</span>
     <span>Liên hệ: tandang@utc.edu.vn</span>
   </div>
 </footer>
@@ -171,7 +169,6 @@ const GROUPS = {
 
 const KEY="cong-ung-dung-links-v2";
 let overrides={};
-try{overrides=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){overrides={}}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(overrides))}catch(e){}};
 const urlOf=a=>(overrides[a.id]!==undefined?overrides[a.id]:a.url).trim();
 
@@ -187,9 +184,9 @@ function card(a){
       <label for="u-${a.id}">Đường dẫn</label>
       <input id="u-${a.id}" data-id="${a.id}" value="${esc(u)}" placeholder="vd: ${esc(a.url||'https://…')}"></div></div>`;
   }
-  if(!u) return `<div class="card missing">${inner}<div class="foot"><span class="file">Chưa gắn liên kết</span><span class="go">Sắp có</span></div></div>`;
+  if(!u) return `<div class="card missing">${inner}<div class="foot"><span class="go">Sắp có</span></div></div>`;
   return `<a class="card" href="${esc(u)}" target="_blank" rel="noopener">${inner}
-    <div class="foot"><span class="file">${esc(u)}</span><span class="go">Mở ứng dụng →</span></div></a>`;
+    <div class="foot"><span class="go">Mở ứng dụng →</span></div></a>`;
 }
 
 function render(){
@@ -215,18 +212,6 @@ document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",
   render();
 }));
 document.getElementById("q").addEventListener("input",e=>{query=e.target.value;render()});
-document.getElementById("editToggle").addEventListener("click",e=>{
-  editing=!editing;
-  e.currentTarget.setAttribute("aria-pressed",editing);
-  e.currentTarget.textContent=editing?"Xong":"Sửa liên kết";
-  document.getElementById("editbar").hidden=!editing;
-  render();
-});
-document.getElementById("main").addEventListener("input",e=>{
-  const id=e.target.dataset&&e.target.dataset.id; if(!id) return;
-  overrides[id]=e.target.value; save();
-});
-document.getElementById("resetLinks").addEventListener("click",()=>{overrides={};save();render()});
 render();
 </script>
 
