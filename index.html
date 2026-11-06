@@ -147,6 +147,10 @@ const APPS = [
    name:"Thiết kế tường chắn đất",
    desc:"Chọn loại tường, kiểm toán ổn định cơ bản và xem hình vẽ minh họa; điều chỉnh nhanh thông số bằng thanh trượt.",
    url:"https://nathnim.github.io/wall/"},
+  {id:"culvert", group:"nen", ref:"TCVN 9845:2013",
+   name:"Tính toán cống",
+   desc:"Tính lưu lượng thiết kế, chọn loại và khẩu độ cống thoát nước qua nền đường; xuất báo cáo PDF.",
+   url:"https://nathnim.github.io/culvert/"},
   {id:"kcad38", group:"nen", ref:"TCCS 38:2022",
    name:"Áo đường mềm TCCS 38",
    desc:"Tính toán kết cấu áo đường mềm từ số liệu giao thông, nền đất và vật liệu; kiểm tra chiều dày các lớp.",
@@ -167,6 +171,10 @@ const APPS = [
    name:"Bản sao số đô thị mẫu",
    desc:"Bảng điều hành đô thị thông minh với dữ liệu mô phỏng: dòng giao thông, cấm đường, nhu cầu đi lại.",
    url:"https://nathnim.github.io/digitaltwins"},
+  {id:"parking", group:"tc", ref:"Bản sao số · Cảm biến · Giá động",
+   name:"Quản lý đỗ xe trên đường",
+   desc:"Minh họa bản sao số đỗ xe trên phố: cảm biến ô đỗ, dẫn đường tới chỗ trống, định giá theo mức chiếm dụng và xử lý vi phạm.",
+   url:"https://nathnim.github.io/onstreetparking/"},
   {id:"standard", group:"tk", ref:"QCVN · TCVN · TCCS",
    name:"Chỉ mục tiêu chuẩn XD – GT",
    desc:"Tra cứu quy chuẩn, tiêu chuẩn xây dựng và giao thông hiện hành theo cấp pháp lý, loại công trình, giai đoạn và chủ đề.",
@@ -185,7 +193,7 @@ const APPS = [
    url:"https://www.zwsoft.com/vn", go:"Truy cập trang →"}
 ];
 const GROUPS = {
-  nen:{title:"Khối nền – mặt đường", tag:"NỀN · MẶT ĐƯỜNG", note:"Ổn định nền, nền đất yếu, tường chắn và kết cấu áo đường"},
+  nen:{title:"Khối nền – mặt đường", tag:"NỀN · MẶT ĐƯỜNG", note:"Ổn định nền, nền đất yếu, tường chắn, cống thoát nước và kết cấu áo đường"},
   tc:{title:"Quản lý, tổ chức đô thị và giao thông", tag:"ĐÔ THỊ · GIAO THÔNG", note:"Dòng xe, điều hành giao thông và bản sao số đô thị"},
   tk:{title:"Tra cứu – Nghiên cứu", tag:"TRA CỨU", note:"Tiêu chuẩn kỹ thuật và công bố khoa học"},
   lk:{title:"Liên kết ứng dụng", tag:"LIÊN KẾT", note:"Phần mềm thiết kế, CAD và BIM của các đơn vị đối tác"}
